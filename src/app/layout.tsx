@@ -46,32 +46,31 @@ function AuthWrapper({ children }: { children: React.ReactNode }) {
     setIsAuthenticated(authStatus);
     setIsLoading(false);
 
-    if (authStatus) {
-      // If already logged in and visiting /login or root, redirect to dashboard
-      if (pathname === "/login" || pathname === "/") {
-        router.replace("/dashboard");
-      }
-    } else {
-      // If not logged in and visiting anything except /login, redirect to login
-      if (pathname !== "/login") {
-        router.replace("/login");
-      }
+    // Redirect rules
+    if (authStatus && pathname === "/login") {
+      router.replace("/dashboard");
+    } else if (!authStatus && pathname !== "/login") {
+      router.replace("/login");
     }
   }, [pathname, router]);
 
+  // Listen for logout/login across tabs
   useEffect(() => {
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key === "isAuthenticated") {
         const authStatus = localStorage.getItem("isAuthenticated") === "true";
         setIsAuthenticated(authStatus);
-        if (!authStatus) {
+
+        if (authStatus && pathname === "/login") {
+          router.replace("/dashboard");
+        } else if (!authStatus && pathname !== "/login") {
           router.replace("/login");
         }
       }
     };
     window.addEventListener("storage", handleStorageChange);
     return () => window.removeEventListener("storage", handleStorageChange);
-  }, [router]);
+  }, [router, pathname]);
 
   if (isLoading) {
     return (
@@ -87,13 +86,18 @@ function AuthWrapper({ children }: { children: React.ReactNode }) {
     <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
       {isAuthenticated ? (
         <div className="flex h-screen bg-gray-100 dark:bg-gray-900">
+          {/* Sidebar */}
           <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+
+          {/* Main content */}
           <div className="flex-1 flex flex-col overflow-hidden">
             <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+
             <main className="flex-1 overflow-x-hidden overflow-y-auto p-4 md:p-6">
               {children}
             </main>
           </div>
+
           <Toaster
             position="top-right"
             toastOptions={{
@@ -112,5 +116,4 @@ function AuthWrapper({ children }: { children: React.ReactNode }) {
     </ThemeProvider>
   );
 }
-
 
