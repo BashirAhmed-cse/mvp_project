@@ -11,33 +11,33 @@ import CrisisManagementDashboard from "@/components/CrisisManagementDashboard";
 
 
 export default function Dashboard() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+//   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  // const [isLoading, setIsLoading] = useState(true);
   
-  const router = useRouter();
+//   const router = useRouter();
 
-useEffect(() => {
-    // Check authentication status
-    const authStatus = localStorage.getItem('isAuthenticated');
-    if (!authStatus) {
-      router.push('/login');
-    } else {
-      setIsAuthenticated(true);
-      setIsLoading(false);
-    }
-  }, [router]);
+// useEffect(() => {
+
+//     const authStatus = localStorage.getItem('isAuthenticated');
+//     if (!authStatus) {
+//       router.push('/login');
+//     } else {
+//       setIsAuthenticated(true);
+//       setIsLoading(false);
+//     }
+//   }, [router]);
   
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
-      </div>
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <div className="flex items-center justify-center min-h-screen">
+  //       <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+  //     </div>
+  //   );
+  // }
 
-  if (!isAuthenticated) {
-    return null;
-  }
+  // if (!isAuthenticated) {
+  //   return null;
+  // }
 
 
 
