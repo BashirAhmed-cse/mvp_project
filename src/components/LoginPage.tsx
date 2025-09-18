@@ -37,9 +37,9 @@ const handleSubmit = async (e: React.FormEvent) => {
     if (!res.ok) throw new Error(data.message);
 
     // Save auth (localStorage for now, but better: cookies/secure storage)
+     localStorage.setItem('user', JSON.stringify(data.user));
     localStorage.setItem('isAuthenticated', 'true');
-    localStorage.setItem('user', JSON.stringify(data.user));
-    localStorage.setItem('token', data.token);
+
 
     router.push('/dashboard');
   } catch (err: any) {
