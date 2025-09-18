@@ -11,15 +11,35 @@ import CrisisManagementDashboard from "@/components/CrisisManagementDashboard";
 
 
 export default function Dashboard() {
-const router = useRouter();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
 
-  useEffect(() => {
-    const auth = localStorage.getItem('isAuthenticated');
-    if (!auth) {
+useEffect(() => {
+    // Check authentication status
+    const authStatus = localStorage.getItem('isAuthenticated');
+    if (!authStatus) {
       router.push('/login');
+    } else {
+      setIsAuthenticated(true);
+      setIsLoading(false);
     }
   }, [router]);
   
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return null;
+  }
+
+
+
   return (
     <div className="w-full bg-gray-50 dark:bg-gray-900">
       <div className="p-6">

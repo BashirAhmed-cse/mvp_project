@@ -1,6 +1,6 @@
 // components/LoginPage.tsx
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Eye, EyeOff, Shield, Mail, Lock, Building2 } from 'lucide-react';
 
@@ -11,6 +11,14 @@ const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const router = useRouter();
+
+    // Check if user is already logged in
+  useEffect(() => {
+    const isAuthenticated = localStorage.getItem('isAuthenticated');
+    if (isAuthenticated) {
+      router.push('/dashboard');
+    }
+  }, [router]);
 
 const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
