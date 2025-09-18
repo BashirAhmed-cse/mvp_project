@@ -57,10 +57,14 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
     { name: "Backup", status: "online", icon: Server }
   ];
 
-  const supportItems = [
-    { icon: HelpCircle, label: "Help & Support", href: "/support" },
-    { icon: LogOut, label: "Logout", href: "#", onClick: handleLogout }
-  ];
+// ✅ Support Section
+const supportItems = [
+  { icon: HelpCircle, label: "Help & Support", href: "/support" },
+  { icon: Settings, label: "Update Password", href: "/update-password" },  // new
+  { icon: Users, label: "Add New User", href: "/add-user" },               // new
+  { icon: LogOut, label: "Logout", href: "#", onClick: handleLogout }
+];
+
 
   function handleLogout(e: React.MouseEvent) {
     e.preventDefault();

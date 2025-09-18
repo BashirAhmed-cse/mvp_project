@@ -1,12 +1,25 @@
+'use client';
+import { useState, useEffect } from "react"
+
+import { useRouter } from 'next/navigation';
+
 import MainGrid from "@/components/MainGrid";
-
-
 import SystemStatusCard from "@/components/SystemStatusCard";
 import GovernanceLogsCard from "@/components/GovernanceLogsCard";
 import AuditLogCard from "@/components/AuditLogCard";
 import CrisisManagementDashboard from "@/components/CrisisManagementDashboard";
 
+
 export default function Dashboard() {
+const router = useRouter();
+
+  useEffect(() => {
+    const auth = localStorage.getItem('isAuthenticated');
+    if (!auth) {
+      router.push('/login');
+    }
+  }, [router]);
+  
   return (
     <div className="w-full bg-gray-50 dark:bg-gray-900">
       <div className="p-6">
