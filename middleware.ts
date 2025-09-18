@@ -1,26 +1,34 @@
 // middleware.ts
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
-import jwt from "jsonwebtoken";
+import { NextRequest, NextResponse } from "next/server";
+import { jwtVerify } from "jose";
 
-const JWT_SECRET = process.env.JWT_SECRET || "supersecret";
+// Convert the secret into a Uint8Array for Web Crypto
+const secret = new TextEncoder().encode(process.env.JWT_SECRET!);
 
-export function middleware(req: NextRequest) {
-  const token = req.cookies.get("token")?.value;
+export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
 
-  if (!token) {
-    return NextResponse.redirect(new URL("/login", req.url));
+  if (pathname.startsWith("/dashboard")) {
+    const token = request.cookies.get("token")?.value;
+
+    if (!token) {
+      return NextResponse.redirect(new URL("/login", request.url));
+    }
+
+    try {
+      // Will throw if invalid
+      await jwtVerify(token, secret);
+      return NextResponse.next();
+    } catch (error) {
+      console.error("JWT verification failed:", error);
+      return NextResponse.redirect(new URL("/login", request.url));
+    }
   }
 
-  try {
-    jwt.verify(token, JWT_SECRET);
-    return NextResponse.next();
-  } catch (error) {
-    return NextResponse.redirect(new URL("/login", req.url));
-  }
+  return NextResponse.next();
 }
 
-// Protect specific routes
+// ✅ DO NOT use runtime: "nodejs" in middleware
 export const config = {
   matcher: ["/dashboard/:path*"],
 };
