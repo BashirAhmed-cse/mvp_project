@@ -21,6 +21,7 @@ useEffect(() => {
     const authStatus = localStorage.getItem('isAuthenticated');
     if (!authStatus) {
       router.push('/dashboard');
+      // router.push('/login');
     } else {
       setIsAuthenticated(true);
       setIsLoading(false);
